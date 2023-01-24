@@ -12,22 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun myButton(
     modifier: Modifier = Modifier,
     symbol: String,
-    onButtonClick: () -> Unit = {}
+    onButtonClick: () -> Unit = {},
+    Color : Color
 ) {
     Surface(
         modifier = Modifier
             .size(100.dp)
             .padding(5.dp)
             .clickable { onButtonClick.invoke()},
-        color = Color.LightGray,
+        color = Color,
         elevation = 0.dp,
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp, bottomEnd = 10.dp, bottomStart = 10.dp)
     ) {
         Column(
             modifier = Modifier,

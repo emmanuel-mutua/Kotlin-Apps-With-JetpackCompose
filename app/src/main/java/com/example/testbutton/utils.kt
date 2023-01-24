@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun myButton(
     modifier: Modifier = Modifier,
-    symbol: String = "Click",
+    symbol: String,
     onButtonClick: () -> Unit = {}
 ) {
     Surface(
@@ -37,4 +37,8 @@ fun myButton(
             Text(text = symbol)
         }
     }
+}
+
+fun randomNumbers(): String{
+    return listOf(1,2,3,4,5,6).random().toString()
 }

@@ -1,5 +1,6 @@
 package com.example.testbutton
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,19 +36,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+@SuppressLint("UnrememberedMutableState")
+@Preview(showSystemUi = true)
 @Composable
 fun app() {
-    val value by remember {
-        mutableStateOf(1)
+    var value by remember {
+        mutableStateOf("1")
     }
-
+var text = randomNumbers()
     Column(
         modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "1")
-
+        Text(text = value,style = MaterialTheme.typography.h3)
+        Spacer(modifier = Modifier.size(10.dp))
+        myButton(Modifier,"Generate", onButtonClick = {
+            value = text
+        }
+        )
     }
 }
+

@@ -1,5 +1,6 @@
 package com.example.unscrample2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
 @Composable
 fun ButtonSurface() {
     var value by remember {
@@ -53,7 +55,8 @@ fun ButtonSurface() {
         TextField(value = value, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),onValueChange = {
             if (it.contains(","))
                 return@TextField
-            if (it.contains(".")){return@TextField}
+            if (it.isEmpty() && it.contains("."))
+                return@TextField
             if (it.contains(" "))
                 return@TextField
                 value = it

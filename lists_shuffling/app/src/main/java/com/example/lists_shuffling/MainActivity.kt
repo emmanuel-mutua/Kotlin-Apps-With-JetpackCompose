@@ -10,9 +10,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,10 +42,10 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun App() {
-    var emoji by remember {
-        mutableStateOf("")
+    var shuffledCards by remember {
+        mutableStateOf(emojis.shuffled())
     }
-    emoji = emojis.toString()
+
 
     Scaffold(topBar = {
         Row(
@@ -56,14 +59,28 @@ fun App() {
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
-    }) {
+        FloatingActionButton(
+            onClick = { shuffledCards = emojis.shuffled() },
+            backgroundColor = Color.Blue,
+            contentColor = Color.White,
+            elevation = FloatingActionButtonDefaults.elevation(),
+            content = {
+                Icon(Icons.Default.Refresh, contentDescription = "Reshuffle")
+            },
+            modifier = Modifier
+                .size(70.dp)
+                .padding(16.dp)
+        )
+
+    },
+    floatingActionButtonPosition = FabPosition.End) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 128.dp),
             contentPadding = PaddingValues(10.dp),
             modifier = Modifier.padding(8.dp)
         ) {
 
-            items(emojis) {
+            items(shuffledCards) {
                 EmojiCard(emoji = it)
             }
         }

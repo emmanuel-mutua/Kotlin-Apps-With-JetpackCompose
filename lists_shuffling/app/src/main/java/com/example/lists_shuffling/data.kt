@@ -25,8 +25,3 @@ val emojis = listOf(
 
 )
 
-data class myclass(
-    val name: String,
-    val age : Int,
-    val yr: Int
-)

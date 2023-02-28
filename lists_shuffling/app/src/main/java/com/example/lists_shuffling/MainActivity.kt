@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lists_shuffling.ui.theme.Lists_shufflingTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,9 +43,12 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun App() {
+
+    val viewModel: DataViewModel = viewModel()
     var shuffledCards by remember {
-        mutableStateOf(emojis.shuffled())
+        mutableStateOf(viewModel.getLists())
     }
+
 
 
     Scaffold(topBar = {
@@ -60,7 +64,7 @@ fun App() {
             )
         }
         FloatingActionButton(
-            onClick = { shuffledCards = emojis.shuffled() },
+            onClick = { shuffledCards = viewModel.shuffleEmoji()},
             backgroundColor = Color.Blue,
             contentColor = Color.White,
             elevation = FloatingActionButtonDefaults.elevation(),
@@ -84,6 +88,7 @@ fun App() {
                 EmojiCard(emoji = it)
             }
         }
+
     }
 }
 

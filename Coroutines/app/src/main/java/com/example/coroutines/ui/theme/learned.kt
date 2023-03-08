@@ -1,5 +1,6 @@
 package com.example.coroutines.ui.theme
 
+
 /**
  *
  *
@@ -87,3 +88,28 @@ Intent(this@MainActivity, MainActivity2::class.java)
 }
 }
  */
+//val api = Retrofit.Builder()
+//    .baseUrl(BASE_URL)
+//    .addConverterFactory(GsonConverterFactory.create())
+//    .build()
+//    .create(MyApi::class.java)
+
+//GlobalScope.launch {
+//    val commets = api.getComments().await()
+//    for (comment in commets){
+//        Log.d(TAG, "${comment.toString()}")
+//    }
+//}
+//data class Comment(
+//    val body: String,
+//    val email: String,
+//    val id: Int,
+//    val name: String,
+//    val postId: Int
+//
+//)
+//
+//interface MyApi{
+//    @GET("/comments")
+//    fun getComments(): Call<List<Comment>>
+//}

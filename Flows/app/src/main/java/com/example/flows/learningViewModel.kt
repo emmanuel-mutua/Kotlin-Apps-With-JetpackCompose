@@ -110,13 +110,10 @@ class LearningViewModel : ViewModel(){
         }
 
     }
+    private val _sharedFlow = MutableSharedFlow<Int>(replay = 5)
+    val sharedFlow = _sharedFlow.asSharedFlow()
 
     init {
-        collectState()
-    }
-
-    init {
-        squareNumber(3)
         viewModelScope.launch {
             sharedFlow.collect{
                 println("First Flow emits $it")
@@ -128,11 +125,7 @@ class LearningViewModel : ViewModel(){
                 println("First Flow emits $it")
             }
         }
-
     }
-
-    private val _sharedFlow = MutableSharedFlow<Int>()
-    val sharedFlow = _sharedFlow.asSharedFlow()
 
     private fun squareNumber(number : Int){
         viewModelScope.launch {
@@ -147,7 +140,7 @@ class LearningViewModel : ViewModel(){
 //a flow is a type that emit multiple values sequentially
 //flow can be used to emit live data from the database
 //you need to deep dive into lists
-//stateflow means to keep the state
+//stateflow means to keep the state, and then you can display it in the ui
 //it can notify changes
 //shared flow = used to send one time events like for example if you are navigating from the login to the dashboard page  and then
 //you need to notify fragment to navigate, login success msg

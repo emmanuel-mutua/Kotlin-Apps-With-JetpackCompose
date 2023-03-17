@@ -10,7 +10,7 @@ interface MarsPhotosRepository {
 }
 
 //this class needs an instance(object) of DefaultAppContainer.MarsApiService
-class DefaultMarsPhotoRepository(private val marsApiService: DefaultAppContainer.MarsApiService) :
+class DefaultMarsPhotoRepository(private val marsApiService: MarsApiService) :
     MarsPhotosRepository {
     override suspend fun getMarsPhotos(): List<MarsPhoto> {
         return marsApiService.getPhotos()

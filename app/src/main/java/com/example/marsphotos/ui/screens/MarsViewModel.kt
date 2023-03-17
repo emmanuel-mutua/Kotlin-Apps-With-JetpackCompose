@@ -25,8 +25,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.marsphotos.MarsPhotoApplication
-import com.example.marsphotos.data.DefaultMarsPhotoRepository
 import com.example.marsphotos.data.MarsPhotosRepository
+import com.example.marsphotos.model.MarsPhoto
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -35,25 +35,13 @@ import java.io.IOException
  * UI state for the Home screen
  */
 sealed interface MarsUiState {
-    data class Success(val photos: String) : MarsUiState
+    data class Success(val photos: List<MarsPhoto>) : MarsUiState
     object Error : MarsUiState
     object Loading : MarsUiState
 }
 
 
-//android framework does not allow values to be passed from the constructor when created
-//we need to implement the viewModelProvider.factory
-//setting an object that creates many instances of the MarsViewModel as needed (singleton object)
 
-companion object{
-    val factory : ViewModelProvider.Factory = viewModelFactory {
-        initializer {
-            val application = (this[APPLICATION_KEY] as MarsPhotoApplication)
-            val marsPhotosRepository = application.container.marsPhotoRepository
-            MarsViewModel(marsPhotosRepository = marsPhotosRepository)
-        }
-    }
-}
 
 class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : ViewModel() {
 
@@ -74,11 +62,10 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
      * Gets Mars photos information from the Mars API Retrofit service and updates the
      */
     private fun getMarsPhotos() {
-
         viewModelScope.launch {
             marsUiState = try {
-
-                MarsUiState.Success("Success. ${resultList.size} Mars photos retrieved")
+                val listResult = marsPhotosRepository.getMarsPhotos()
+                MarsUiState.Success(listResult)
             } catch (e: IOException) {
                 MarsUiState.Error
             } catch (e: HttpException) {
@@ -86,4 +73,18 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
             }
         }
     }
+    //adding repo to viewModel
+    //android framework does not allow values to be passed from the constructor when created
+//we need to implement the viewModelProvider.factory
+//setting an object that creates many instances of the MarsViewModel as needed (singleton object)
+    companion object{
+        val factory : ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as MarsPhotoApplication)
+                val marsPhotosRepository = application.container.marsPhotoRepository
+                MarsViewModel(marsPhotosRepository = marsPhotosRepository)
+            }
+        }
+    }
+
 }

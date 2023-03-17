@@ -44,9 +44,6 @@ interface MarsApiService {
 
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
+ * by lazy means that it will be active when it is initialized
  */
-object MarsApi {
-    val retrofitService: MarsApiService by lazy {
-        retrofit.create(MarsApiService::class.java)
-    }
-}
+

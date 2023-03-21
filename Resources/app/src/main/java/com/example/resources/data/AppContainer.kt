@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 //setting up retrofitService
 
 interface AppContainer {
-    val appRepository : AppRepository
+    val userDataRepository : AppRepository
 }
 
 class DefaultAppContainer : AppContainer{
@@ -23,7 +23,7 @@ class DefaultAppContainer : AppContainer{
     val retrofitService : NetApiService by lazy {
         retrofit.create(NetApiService ::class.java)
     }
-    override val appRepository: AppRepository by lazy{
+    override val userDataRepository: AppRepository by lazy{
         DefaultAppRepository(retrofitService)
     }
 }

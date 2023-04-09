@@ -23,4 +23,7 @@ interface NumbersDao {
     @Query("SELECT * from numbers ORDER BY pNumber ASC")
      fun getNumberOrderBypNumber() : Flow<List<Numbers>>
 
+    @Query("SELECT * from numbers WHERE fName = :query OR lName = :query OR pNumber = :query")
+    fun getNumbers(query: String) : Flow<List<Numbers>>
+
 }

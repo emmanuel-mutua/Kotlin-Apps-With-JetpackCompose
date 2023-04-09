@@ -34,7 +34,7 @@ private val database by lazy {
         factoryProducer = {
             object : ViewModelProvider.Factory{
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return NumbersViewModel(database.numbersDao) as T
+                    return NumbersViewModel(database.numbersDao, this@MainActivity) as T
                 }
             }
         }
@@ -45,7 +45,7 @@ private val database by lazy {
         setContent {
             LearningRoomDatabaseTheme {
                 val state by viewModel.state.collectAsState()
-                NumberScreen(state, viewModel :: onEvent)
+                NumberScreen(state, viewModel :: onEvent,state.numbers,)
             }
         }
     }

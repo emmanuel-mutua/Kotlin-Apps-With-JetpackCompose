@@ -1,11 +1,21 @@
 package com.example.learningroomdatabase.screens
 
+import android.Manifest
+import android.R.attr
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class NumbersViewModel(private val dao: NumbersDao) : ViewModel(){
+
+class NumbersViewModel(private val dao: NumbersDao, private val activity: Activity) : ViewModel(){
 
      private val _sortType = MutableStateFlow(SortTyp.FIRST_NAME)
 
@@ -101,7 +111,63 @@ class NumbersViewModel(private val dao: NumbersDao) : ViewModel(){
             is NumberEvent.SortContacts -> {
                _sortType.value = event.sortType
             }
+            is NumberEvent.CallNumber -> {
+                val phoneNumber = event.number
+                initiatePhoneCall(phoneNumber)
+            }
+            is NumberEvent.MessageNumber -> {
+                val number = event.number
+                initiateSendMessage(number)
+            }
+            is NumberEvent.ShareNumber -> {
+                val phoneNumber = event.number.pNumber
+                val fName = event.number.fName
+                val lName = event.number.lName
+
+                val contact = "Name : $fName $lName , Tel: $phoneNumber"
+                shareNumber(contact)
+            }
         }
     }
 
+
+        private fun initiateSendMessage(phoneNumber: String) {
+            val REQUEST_CODE_SEND_SMS_PERMISSION = 1
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("smsto:$phoneNumber")
+            val permission = Manifest.permission.SEND_SMS
+            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, arrayOf(permission), REQUEST_CODE_SEND_SMS_PERMISSION)
+            } else {
+                // Permission already granted, initiate sending SMS
+                activity.startActivity(intent)
+            }
+        }
+
+    private fun shareNumber(phoneNumber: String){
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, phoneNumber)
+        activity.startActivity(Intent.createChooser(intent, "Share Via"))
+    }
+
+
+    // Function to initiate a phone call
+    private fun initiatePhoneCall(phoneNumber: String) {
+        val REQUEST_CODE_CALL_PHONE_PERMISSION = 1
+        val intent = Intent(Intent.ACTION_CALL)
+        intent.data = Uri.parse("tel:$phoneNumber")
+        val permission = Manifest.permission.CALL_PHONE
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(permission), REQUEST_CODE_CALL_PHONE_PERMISSION)
+        } else {
+            // Permission already granted, initiate phone call
+            activity.startActivity(intent)
+        }
+    }
+
+
+
+
 }
+

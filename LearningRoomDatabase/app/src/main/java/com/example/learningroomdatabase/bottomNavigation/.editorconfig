@@ -1,0 +1,14 @@
+root = true
+
+[*]
+Bottom navigation Learning
+
+state hoising = moving the state of a composable to the caller eg
+
+learn = developer.android.com/jetpack/compose/state#state-hoisting
+
+1 - NavController = must be associated with a single NavHost
+
+val navController = remeberNavController() //the NavHostController
+backstack = sequence of screens, when a user navigates to a new screen, then
+            the previous screen is added to the backstack

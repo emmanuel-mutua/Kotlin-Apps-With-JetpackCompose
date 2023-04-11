@@ -25,13 +25,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.learningroomdatabase.bottomNavigation.BottomNav
 
 @Composable
 fun NumberScreen(
     state: NumberState,
     onEvent: (NumberEvent) -> Unit,
     contacts: List<Numbers>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
 
 
@@ -39,18 +41,9 @@ fun NumberScreen(
         onEvent(NumberEvent.ShowDialog)
         AddNumberDialog(onEvent, state)
     }
-    Scaffold(
-        modifier.padding(10.dp),
-        floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(NumberEvent.ShowDialog) }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Contact")
-            }
-        }
-    ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
         ) {
             item {
                 Row(
@@ -74,15 +67,13 @@ fun NumberScreen(
             }
 
             items(contacts) { contact ->
-                ContactCard(state, contact, onEvent)
+                ContactCard(contact, onEvent)
             }
         }
-    }
 }
 
 @Composable
 fun ContactCard(
-    state: NumberState,
     contact: Numbers,
     onEvent: (NumberEvent) -> Unit,
 ) {
@@ -155,10 +146,9 @@ fun ContactCard(
                     .padding(start = 10.dp)
             ) {
                 Text(text = "${contact.fName} ${contact.lName}", fontSize = 20.sp)
-                Text(text = "${contact.pNumber}", fontSize = 15.sp)
             }
             IconButton(onClick = { isContextMenuVisible = true }) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "More")
             }
         }
 

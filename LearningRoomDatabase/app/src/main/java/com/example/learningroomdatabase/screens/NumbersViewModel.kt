@@ -30,6 +30,12 @@ class NumbersViewModel(private val dao: NumbersDao, private val activity: Activi
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+
+    /**
+     * Flow basically provides live data
+     * passing the latest values of _state, _contact, _sortType to state, then copy the latest values to state
+     * state flow is basically a flow that can be observed by multiple consumers/ similar to livedata
+     */
     val state = combine(_state, _contacts, _sortType){
         state,contacts,sortType ->
         state.copy(
@@ -127,6 +133,7 @@ class NumbersViewModel(private val dao: NumbersDao, private val activity: Activi
                 val contact = "Name : $fName $lName , Tel: $phoneNumber"
                 shareNumber(contact)
             }
+            else -> {}
         }
     }
 
@@ -140,7 +147,7 @@ class NumbersViewModel(private val dao: NumbersDao, private val activity: Activi
                 ActivityCompat.requestPermissions(activity, arrayOf(permission), REQUEST_CODE_SEND_SMS_PERMISSION)
             } else {
                 // Permission already granted, initiate sending SMS
-                activity.startActivity(intent)
+                activity.startActivity(Intent.createChooser(intent, "Msg Via"))
             }
         }
 
@@ -162,11 +169,9 @@ class NumbersViewModel(private val dao: NumbersDao, private val activity: Activi
             ActivityCompat.requestPermissions(activity, arrayOf(permission), REQUEST_CODE_CALL_PHONE_PERMISSION)
         } else {
             // Permission already granted, initiate phone call
-            activity.startActivity(intent)
+            activity.startActivity(Intent.createChooser(intent, "Call Via"))
         }
     }
-
-
 
 
 }
